@@ -36,7 +36,7 @@ async function run(): Promise<void> {
     const code = await core.group("Running Clippy with reviewdog 🐶 ...", async (): Promise<number> => {
       const output = await exec.getExecOutput(
         "cargo",
-        ["clippy", "--output-format", "short"],
+        ["clippy", "--message-format", "short"],
         {
           cwd,
           ignoreReturnCode: true,
