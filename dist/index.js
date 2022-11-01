@@ -170,7 +170,8 @@ function run() {
                     cwd,
                     ignoreReturnCode: true,
                 });
-                core.info(`debug: ${output.stdout}`);
+                core.info(`debug stdout: ${output.stdout}`);
+                core.info(`debug stderr: ${output.stderr}`);
                 process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
                 return yield exec.exec(reviewdog, [
                     "-f=clippy",
