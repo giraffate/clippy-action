@@ -166,7 +166,7 @@ function run() {
                 return yield installer.installReviewdog(reviewdogVersion, tmpdir);
             }));
             const code = yield core.group("Running Clippy with reviewdog 🐶 ...", () => __awaiter(this, void 0, void 0, function* () {
-                const output = yield exec.getExecOutput("cargo", ["clippy", "-q", "--message-format", "short"], {
+                const output = yield exec.getExecOutput("cargo", ["clippy", "--color", "never", "-q", "--message-format", "short"], {
                     cwd,
                     ignoreReturnCode: true,
                 });
