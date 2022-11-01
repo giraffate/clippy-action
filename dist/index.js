@@ -154,7 +154,7 @@ function run() {
         const tmpdir = yield fs_1.promises.mkdtemp(path.join(runnerTmpdir, "reviewdog-"));
         try {
             const reviewdogVersion = core.getInput("reviewdog_version") || "latest";
-            const toolName = core.getInput("tool_name") || "golangci";
+            const toolName = core.getInput("tool_name") || "clippy";
             const level = core.getInput("level") || "error";
             const reporter = core.getInput("reporter") || "github-pr-check";
             const filterMode = core.getInput("filter_mode") || "added";
@@ -162,9 +162,6 @@ function run() {
             const reviewdogFlags = core.getInput("reviewdog_flags");
             const workdir = core.getInput("workdir") || ".";
             const cwd = path.relative(process.env["GITHUB_WORKSPACE"] || process.cwd(), workdir);
-            yield core.group("Installing Rust ...", () => __awaiter(this, void 0, void 0, function* () {
-                // TODO
-            }));
             const reviewdog = yield core.group("🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog", () => __awaiter(this, void 0, void 0, function* () {
                 return yield installer.installReviewdog(reviewdogVersion, tmpdir);
             }));
@@ -173,6 +170,7 @@ function run() {
                     cwd,
                     ignoreReturnCode: true,
                 });
+                core.info(`debug: ${output.stdout}`);
                 process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
                 return yield exec.exec(reviewdog, [
                     "-f=clippy",
