@@ -38,8 +38,6 @@ async function run(): Promise<void> {
           ignoreReturnCode: true,
         }
       );
-      core.info(`debug stdout: ${output.stdout}`);
-      core.info(`debug stderr: ${output.stderr}`);
 
       process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
       return await exec.exec(
@@ -55,7 +53,7 @@ async function run(): Promise<void> {
         ],
         {
           cwd,
-          input: Buffer.from(output.stdout, "utf-8"),
+          input: Buffer.from(output.stderr, "utf-8"),
           ignoreReturnCode: true,
         }
       );

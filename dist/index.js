@@ -170,8 +170,6 @@ function run() {
                     cwd,
                     ignoreReturnCode: true,
                 });
-                core.info(`debug stdout: ${output.stdout}`);
-                core.info(`debug stderr: ${output.stderr}`);
                 process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
                 return yield exec.exec(reviewdog, [
                     "-f=clippy",
@@ -183,7 +181,7 @@ function run() {
                     ...parse(reviewdogFlags),
                 ], {
                     cwd,
-                    input: Buffer.from(output.stdout, "utf-8"),
+                    input: Buffer.from(output.stderr, "utf-8"),
                     ignoreReturnCode: true,
                 });
             }));
