@@ -13,7 +13,7 @@ async function run(): Promise<void> {
 
   try {
     const reviewdogVersion = core.getInput("reviewdog_version") || "latest";
-    const toolName = core.getInput("tool_name") || "golangci";
+    const toolName = core.getInput("tool_name") || "clippy";
     const level = core.getInput("level") || "error";
     const reporter = core.getInput("reporter") || "github-pr-check";
     const filterMode = core.getInput("filter_mode") || "added";
@@ -21,10 +21,6 @@ async function run(): Promise<void> {
     const reviewdogFlags = core.getInput("reviewdog_flags");
     const workdir = core.getInput("workdir") || ".";
     const cwd = path.relative(process.env["GITHUB_WORKSPACE"] || process.cwd(), workdir);
-
-    await core.group("Installing Rust ...", async () => {
-      // TODO
-    });
 
     const reviewdog = await core.group(
       "🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog",
@@ -42,6 +38,7 @@ async function run(): Promise<void> {
           ignoreReturnCode: true,
         }
       );
+      core.info(`debug: ${output.stdout}`);
 
       process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
       return await exec.exec(
