@@ -1,11 +1,51 @@
-name: 'Your name here'
+name: 'Run Clippy with reviewdog'
 description: 'Provide a description here'
 author: 'Your name or organization here'
 inputs:
-  milliseconds: # change this
+  github_token:
+    description: "GITHUB_TOKEN."
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    default: ${{ github.token }}
+  tool_name:
+    description: "Tool name to use for reviewdog reporter"
+    required: false
+    default: "clippy"
+  level:
+    description: "Report level for reviewdog [info,warning,error]"
+    required: false
+    default: "error"
+  reporter:
+    description: "Reporter of reviewdog command [github-pr-check,github-pr-review,github-check]."
+    required: false
+    default: "github-pr-check"
+  filter_mode:
+    description: |
+      Filtering for the reviewdog command [added,diff_context,file,nofilter].
+      Default is added.
+    required: false
+    default: "added"
+  fail_on_error:
+    description: |
+      Exit code for reviewdog when errors are found [true,false]
+      Default is `false`.
+    required: false
+    default: "false"
+  reviewdog_flags:
+    description: "Additional reviewdog flags"
+    required: false
+    default: ""
+  workdir:
+    description: "Working directory relative to the root directory."
+    required: false
+    default: "."
+  reviewdog_version:
+    description: "the version of reviewdog"
+    required: false
+    default: latest
+  cache:
+    deprecation: "enable cache"
+    default: true
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
