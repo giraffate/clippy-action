@@ -36,28 +36,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.installReviewdog = void 0;
-const path = __importStar(__nccwpck_require__(5622));
 const core = __importStar(__nccwpck_require__(2186));
-const tc = __importStar(__nccwpck_require__(7784));
 const http = __importStar(__nccwpck_require__(6255));
+const path = __importStar(__nccwpck_require__(5622));
+const tc = __importStar(__nccwpck_require__(7784));
 function installReviewdog(tag, directory) {
     return __awaiter(this, void 0, void 0, function* () {
-        const owner = "reviewdog";
-        const repo = "reviewdog";
+        const owner = 'reviewdog';
+        const repo = 'reviewdog';
         const version = yield tagToVersion(tag, owner, repo);
         // get the os information
         let platform = process.platform.toString();
-        let ext = "";
+        let ext = '';
         switch (platform) {
-            case "darwin":
-                platform = "Darwin";
+            case 'darwin':
+                platform = 'Darwin';
                 break;
-            case "linux":
-                platform = "Linux";
+            case 'linux':
+                platform = 'Linux';
                 break;
-            case "win32":
-                platform = "Windows";
-                ext = ".exe";
+            case 'win32':
+                platform = 'Windows';
+                ext = '.exe';
                 break;
             default:
                 throw new Error(`unsupported platform: ${platform}`);
@@ -65,13 +65,13 @@ function installReviewdog(tag, directory) {
         // get the arch information
         let arch = process.arch;
         switch (arch) {
-            case "x64":
-                arch = "x86_64";
+            case 'x64':
+                arch = 'x86_64';
                 break;
-            case "arm64":
+            case 'arm64':
                 break;
-            case "x32":
-                arch = "i386";
+            case 'x32':
+                arch = 'i386';
                 break;
             default:
                 throw new Error(`unsupported arch: ${arch}`);
@@ -89,10 +89,10 @@ function tagToVersion(tag, owner, repo) {
     return __awaiter(this, void 0, void 0, function* () {
         core.info(`finding a release for ${tag}`);
         const url = `https://github.com/${owner}/${repo}/releases/${tag}`;
-        const client = new http.HttpClient("clippy-action/v1");
-        const headers = { [http.Headers.Accept]: "application/json" };
+        const client = new http.HttpClient('clippy-action/v1');
+        const headers = { [http.Headers.Accept]: 'application/json' };
         const response = yield client.getJson(url, headers);
-        if (response.statusCode != http.HttpCodes.OK) {
+        if (response.statusCode !== http.HttpCodes.OK) {
             core.error(`${url} returns unexpected HTTP status code: ${response.statusCode}`);
         }
         if (!response.result) {
@@ -100,7 +100,7 @@ function tagToVersion(tag, owner, repo) {
         }
         let realTag = response.result.tag_name;
         // if version starts with 'v', remove it
-        realTag = realTag.replace(/^v/, "");
+        realTag = realTag.replace(/^v/, '');
         return realTag;
     });
 }
@@ -142,50 +142,84 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const fs_1 = __nccwpck_require__(5747);
-const os = __importStar(__nccwpck_require__(2087));
-const path = __importStar(__nccwpck_require__(5622));
 const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const installer = __importStar(__nccwpck_require__(1480));
+const io = __importStar(__nccwpck_require__(7436));
+const os = __importStar(__nccwpck_require__(2087));
+const path = __importStar(__nccwpck_require__(5622));
+const fs_1 = __nccwpck_require__(5747);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const runnerTmpdir = process.env["RUNNER_TEMP"] || os.tmpdir();
-        const tmpdir = yield fs_1.promises.mkdtemp(path.join(runnerTmpdir, "reviewdog-"));
+        const runnerTmpdir = process.env['RUNNER_TEMP'] || os.tmpdir();
+        const tmpdir = yield fs_1.promises.mkdtemp(path.join(runnerTmpdir, 'reviewdog-'));
         try {
-            const reviewdogVersion = core.getInput("reviewdog_version") || "latest";
-            const toolName = core.getInput("tool_name") || "clippy";
-            const level = core.getInput("level") || "error";
-            const reporter = core.getInput("reporter") || "github-pr-check";
-            const filterMode = core.getInput("filter_mode") || "added";
-            const failOnError = core.getInput("fail_on_error") || "false";
-            const reviewdogFlags = core.getInput("reviewdog_flags");
-            const workdir = core.getInput("workdir") || ".";
-            const cwd = path.relative(process.env["GITHUB_WORKSPACE"] || process.cwd(), workdir);
-            const reviewdog = yield core.group("🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog", () => __awaiter(this, void 0, void 0, function* () {
+            const reviewdogVersion = core.getInput('reviewdog_version') || 'latest';
+            const toolName = core.getInput('tool_name') || 'clippy';
+            const level = core.getInput('level') || 'error';
+            const reporter = core.getInput('reporter') || 'github-pr-check';
+            const filterMode = core.getInput('filter_mode') || 'added';
+            const failOnError = core.getInput('fail_on_error') || 'false';
+            const reviewdogFlags = core.getInput('reviewdog_flags');
+            const workdir = core.getInput('workdir') || '.';
+            const cwd = path.relative(process.env['GITHUB_WORKSPACE'] || process.cwd(), workdir);
+            const reviewdog = yield core.group('🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog', () => __awaiter(this, void 0, void 0, function* () {
                 return yield installer.installReviewdog(reviewdogVersion, tmpdir);
             }));
-            const code = yield core.group("Running Clippy with reviewdog 🐶 ...", () => __awaiter(this, void 0, void 0, function* () {
-                const output = yield exec.getExecOutput("cargo", ["clippy", "--color", "never", "-q", "--message-format", "short"], {
+            const code = yield core.group('Running Clippy with reviewdog 🐶 ...', () => __awaiter(this, void 0, void 0, function* () {
+                const output = [];
+                yield exec.exec('cargo', ['clippy', '--color', 'never', '-q', '--message-format', 'json'], {
                     cwd,
                     ignoreReturnCode: true,
+                    listeners: {
+                        stdline: (line) => {
+                            let content;
+                            try {
+                                content = JSON.parse(line);
+                            }
+                            catch (error) {
+                                core.debug('failed to parse JSON');
+                                return;
+                            }
+                            if (content.reason !== 'compiler-message') {
+                                core.debug('ignore all but `compiler-message`');
+                                return;
+                            }
+                            if (content.message.code === null) {
+                                core.debug('message code is missing, ignore it');
+                                return;
+                            }
+                            core.debug('this is a compiler-message!');
+                            const span = content.message.spans[0];
+                            const rendered = reporter === 'github-pr-review'
+                                ? ` \n<pre><code>${content.message.rendered}</code></pre>\n__END__`
+                                : `${content.message.rendered}\n__END__`;
+                            const ret = `${span.file_name}:${span.line_start}:${span.column_start}:${rendered}`;
+                            output.push(ret);
+                        }
+                    }
                 });
-                process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
+                core.info(`debug: ${output.join('\n')}`);
+                process.env['REVIEWDOG_GITHUB_API_TOKEN'] =
+                    core.getInput('github_token');
                 return yield exec.exec(reviewdog, [
-                    "-f=clippy",
+                    '-efm=%E%f:%l:%c:%m',
+                    '-efm=%Z__END__',
+                    '-efm=%C%m',
+                    '-efm=%C',
                     `-name=${toolName}`,
                     `-reporter=${reporter}`,
                     `-filter-mode=${filterMode}`,
                     `-fail-on-error=${failOnError}`,
                     `-level=${level}`,
-                    ...parse(reviewdogFlags),
+                    ...parse(reviewdogFlags)
                 ], {
                     cwd,
-                    input: Buffer.from(output.stderr, "utf-8"),
-                    ignoreReturnCode: true,
+                    input: Buffer.from(output.join('\n'), 'utf-8'),
+                    ignoreReturnCode: true
                 });
             }));
-            if (code != 0) {
+            if (code !== 0) {
                 core.setFailed(`reviewdog exited with status code: ${code}`);
             }
         }
@@ -193,11 +227,27 @@ function run() {
             if (error instanceof Error)
                 core.setFailed(error.message);
         }
+        finally {
+            // clean up the temporary directory
+            try {
+                yield io.rmRF(tmpdir);
+            }
+            catch (error) {
+                // suppress errors
+                // Garbage will remain, but it may be harmless.
+                if (error instanceof Error) {
+                    core.info(`clean up failed: ${error.message}`);
+                }
+                else {
+                    core.info(`clean up failed: ${error}`);
+                }
+            }
+        }
     });
 }
 function parse(flags) {
     flags = flags.trim();
-    if (flags === "") {
+    if (flags === '') {
         return [];
     }
     // TODO: need to simulate bash?
