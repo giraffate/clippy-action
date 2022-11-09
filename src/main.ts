@@ -13,6 +13,7 @@ async function run(): Promise<void> {
   try {
     const reviewdogVersion = core.getInput('reviewdog_version') || 'latest'
     const toolName = core.getInput('tool_name') || 'clippy'
+    const clippyFlags = core.getInput('clippy_flags');
     const level = core.getInput('level') || 'error'
     const reporter = core.getInput('reporter') || 'github-pr-check'
     const filterMode = core.getInput('filter_mode') || 'added'
@@ -37,7 +38,7 @@ async function run(): Promise<void> {
         const output: string[] = []
         await exec.exec(
           'cargo',
-          ['clippy', '--color', 'never', '-q', '--message-format', 'json'],
+          ['clippy', '--color', 'never', '-q', '--message-format', 'json', ...parse(clippyFlags)],
           {
             cwd,
             ignoreReturnCode: true,
@@ -128,7 +129,6 @@ function parse(flags: string): string[] {
     return []
   }
 
-  // TODO: need to simulate bash?
   return flags.split(/\s+/)
 }
 
