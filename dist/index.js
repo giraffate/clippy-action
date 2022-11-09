@@ -156,6 +156,7 @@ function run() {
         try {
             const reviewdogVersion = core.getInput('reviewdog_version') || 'latest';
             const toolName = core.getInput('tool_name') || 'clippy';
+            const clippyFlags = core.getInput('clippy_flags');
             const level = core.getInput('level') || 'error';
             const reporter = core.getInput('reporter') || 'github-pr-check';
             const filterMode = core.getInput('filter_mode') || 'added';
@@ -168,7 +169,7 @@ function run() {
             }));
             const code = yield core.group('Running Clippy with reviewdog 🐶 ...', () => __awaiter(this, void 0, void 0, function* () {
                 const output = [];
-                yield exec.exec('cargo', ['clippy', '--color', 'never', '-q', '--message-format', 'json'], {
+                yield exec.exec('cargo', ['clippy', '--color', 'never', '-q', '--message-format', 'json', ...parse(clippyFlags)], {
                     cwd,
                     ignoreReturnCode: true,
                     listeners: {
@@ -250,7 +251,6 @@ function parse(flags) {
     if (flags === '') {
         return [];
     }
-    // TODO: need to simulate bash?
     return flags.split(/\s+/);
 }
 run();
