@@ -3,6 +3,8 @@
 This action runs [Clippy](https://github.com/rust-lang/rust-clippy) with
 [reviewdog](https://github.com/reviewdog/reviewdog) on pull requests to improve code review experience.
 
+<img width="943" alt="スクリーンショット 2022-11-08 8 57 47" src="https://user-images.githubusercontent.com/17407489/200965354-b79c2b86-958f-42ca-bdf1-46bf5511aa5e.png">
+
 ## Example usage
 
 ```yml
