@@ -1,11 +1,18 @@
 name: 'Run Clippy with reviewdog'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+description: '🐶 Run Clippy with reviewdog on pull requests to improve code review experience'
+author: 'Takayuki Nakata'
+branding:
+  icon: "check-circle"
+  color: "blue"
 inputs:
   github_token:
     description: "GITHUB_TOKEN."
     required: true
     default: ${{ github.token }}
+  clippy_flags:
+    description: "clippy flags. (cargo clippy --color never -q --message-format json `<clippy_flags>`)"
+    required: false
+    default: ""
   tool_name:
     description: "Tool name to use for reviewdog reporter"
     required: false
@@ -42,10 +49,6 @@ inputs:
     description: "the version of reviewdog"
     required: false
     default: latest
-  cache:
-    deprecation: "enable cache"
-    default: true
-    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
