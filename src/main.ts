@@ -75,8 +75,6 @@ async function run(): Promise<void> {
           }
         )
 
-        core.info(`debug: ${output.join('\n')}`)
-
         process.env['REVIEWDOG_GITHUB_API_TOKEN'] =
           core.getInput('github_token')
         return await exec.exec(

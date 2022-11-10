@@ -10,21 +10,13 @@ This action runs [Clippy](https://github.com/rust-lang/rust-clippy) with
 ```yml
 name: clippy-action
 on: [pull_request]
-env:
-  CARGO_TERM_COLOR: always
 jobs:
   clippy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Install latest nightly
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: nightly
-        override: true
-        components: rustfmt, clippy
-    - name: clippy-action
-      uses: giraffate/clippy-action@main
+    - uses: dtolnay/rust-toolchain@stable
+    - uses: giraffate/clippy-action@main
       with:
         reporter: 'github-pr-review'
         github_token: ${{ secrets.GITHUB_TOKEN }}
