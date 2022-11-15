@@ -16,6 +16,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: clippy
     - uses: giraffate/clippy-action@main
       with:
         reporter: 'github-pr-review'
