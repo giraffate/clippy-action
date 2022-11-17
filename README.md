@@ -18,7 +18,7 @@ jobs:
     - uses: dtolnay/rust-toolchain@stable
       with:
         components: clippy
-    - uses: giraffate/clippy-action@main
+    - uses: giraffate/clippy-action@v1
       with:
         reporter: 'github-pr-review'
         github_token: ${{ secrets.GITHUB_TOKEN }}
