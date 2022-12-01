@@ -13,7 +13,7 @@ async function run(): Promise<void> {
   try {
     const reviewdogVersion = core.getInput('reviewdog_version') || 'latest'
     const toolName = core.getInput('tool_name') || 'clippy'
-    const clippyFlags = core.getInput('clippy_flags');
+    const clippyFlags = core.getInput('clippy_flags')
     const level = core.getInput('level') || 'error'
     const reporter = core.getInput('reporter') || 'github-pr-check'
     const filterMode = core.getInput('filter_mode') || 'added'
@@ -38,7 +38,15 @@ async function run(): Promise<void> {
         const output: string[] = []
         await exec.exec(
           'cargo',
-          ['clippy', '--color', 'never', '-q', '--message-format', 'json', ...parse(clippyFlags)],
+          [
+            'clippy',
+            '--color',
+            'never',
+            '-q',
+            '--message-format',
+            'json',
+            ...parse(clippyFlags)
+          ],
           {
             cwd,
             ignoreReturnCode: true,
@@ -64,11 +72,13 @@ async function run(): Promise<void> {
 
                 core.debug('this is a compiler-message!')
                 const span = content.message.spans[0]
+                const messageLevel =
+                  content.message.level === 'warning' ? 'w' : 'e'
                 const rendered =
                   reporter === 'github-pr-review'
                     ? ` \n<pre><code>${content.message.rendered}</code></pre>\n__END__`
                     : `${content.message.rendered}\n__END__`
-                const ret = `${span.file_name}:${span.line_start}:${span.column_start}:${rendered}`
+                const ret = `${span.file_name}:${span.line_start}:${span.column_start}:${messageLevel}:${rendered}`
                 output.push(ret)
               }
             }
@@ -80,8 +90,10 @@ async function run(): Promise<void> {
         return await exec.exec(
           reviewdog,
           [
-            '-efm=%E%f:%l:%c:%m',
+            '-efm=<pre><code>%E%f:%l:%c:%t:%m',
+            '-efm=%E%f:%l:%c:%t:%m',
             '-efm=%Z__END__',
+            '-efm=%C%m</code></pre>',
             '-efm=%C%m',
             '-efm=%C',
             `-name=${toolName}`,
