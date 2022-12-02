@@ -34,6 +34,7 @@ jobs:
 ### `clippy_flags`
 
 Optional. clippy flags. (cargo clippy --color never -q --message-format json `<clippy_flags>`)
+For example, `clippy_flags: -- -Dwarnings`.
 
 ### `tool_name`
 
@@ -52,6 +53,17 @@ Optional. Working directory relative to the root directory.
 
 Optional. Reporter of reviewdog command [github-pr-check,github-pr-review].
 It's same as `-reporter` flag of reviewdog.
+
+#### github-pr-review
+|`cargo clippy`|`cargo clippy -- -Dwarnings`|
+|---|---|
+|<img width="913" alt="github-pr-review_warning" src="https://user-images.githubusercontent.com/17407489/205067105-4511a31e-9e95-407c-ae44-c8699e46d780.png">|<img width="911" alt="github-pr-review_error" src="https://user-images.githubusercontent.com/17407489/205067361-f22254a8-7211-457e-82a1-006a4cfc3c22.png">|
+
+#### github-pr-check
+|`cargo clippy`|`cargo clippy -- -Dwarnings`|
+|---|---|
+|<img width="855" alt="github-pr-check_warning" src="https://user-images.githubusercontent.com/17407489/205067697-029aceba-a143-4183-85de-a4ff22c2ed27.png">|<img width="867" alt="github-pr-check_error" src="https://user-images.githubusercontent.com/17407489/205067734-fc7decb6-21df-49b0-9cd6-83bc40cd26ec.png">|
+
 
 ### `filter_mode`
 
