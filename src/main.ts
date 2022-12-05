@@ -14,6 +14,7 @@ async function run(): Promise<void> {
     const reviewdogVersion = core.getInput('reviewdog_version') || 'latest'
     const toolName = core.getInput('tool_name') || 'clippy'
     const clippyFlags = core.getInput('clippy_flags')
+    const clippyDebug = core.getInput('clippy_debug') || 'false'
     const level = core.getInput('level') || 'error'
     const reporter = core.getInput('reporter') || 'github-pr-check'
     const filterMode = core.getInput('filter_mode') || 'added'
@@ -50,6 +51,7 @@ async function run(): Promise<void> {
           {
             cwd,
             ignoreReturnCode: true,
+            silent: clippyDebug !== 'true',
             listeners: {
               stdline: (line: string) => {
                 let content: CompilerMessage

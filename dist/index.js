@@ -157,6 +157,7 @@ function run() {
             const reviewdogVersion = core.getInput('reviewdog_version') || 'latest';
             const toolName = core.getInput('tool_name') || 'clippy';
             const clippyFlags = core.getInput('clippy_flags');
+            const clippyDebug = core.getInput('clippy_debug') || 'false';
             const level = core.getInput('level') || 'error';
             const reporter = core.getInput('reporter') || 'github-pr-check';
             const filterMode = core.getInput('filter_mode') || 'added';
@@ -180,6 +181,7 @@ function run() {
                 ], {
                     cwd,
                     ignoreReturnCode: true,
+                    silent: clippyDebug !== 'true',
                     listeners: {
                         stdline: (line) => {
                             let content;
