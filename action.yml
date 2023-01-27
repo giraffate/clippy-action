@@ -7,7 +7,7 @@ branding:
 inputs:
   github_token:
     description: "GITHUB_TOKEN."
-    required: true
+    required: false
     default: ${{ github.token }}
   clippy_flags:
     description: "clippy flags. (cargo clippy --color never -q --message-format json `<clippy_flags>`)"
