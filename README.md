@@ -29,7 +29,7 @@ jobs:
 
 ### `github_token`
 
-**Required**. Default is `${{ github.token }}`.
+Optional. Default is `${{ github.token }}`.
 
 ### `clippy_flags`
 
